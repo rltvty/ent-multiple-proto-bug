@@ -8,8 +8,11 @@ import (
 	"fmt"
 	"sync"
 
-	"entgo.io/bug/ent/predicate"
-	"entgo.io/bug/ent/user"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/predicate"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
+	barv1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/bar/v1alpha"
+	"github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
+	foov1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 
 	"entgo.io/ent"
 )
@@ -35,6 +38,8 @@ type UserMutation struct {
 	age           *int
 	addage        *int
 	name          *string
+	foo           **foov1alpha.Foo
+	bar           **barv1alpha.Bar
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -231,6 +236,78 @@ func (m *UserMutation) ResetName() {
 	m.name = nil
 }
 
+// SetFoo sets the "foo" field.
+func (m *UserMutation) SetFoo(f *foov1alpha.Foo) {
+	m.foo = &f
+}
+
+// Foo returns the value of the "foo" field in the mutation.
+func (m *UserMutation) Foo() (r *foov1alpha.Foo, exists bool) {
+	v := m.foo
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFoo returns the old "foo" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldFoo(ctx context.Context) (v *foov1alpha.Foo, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFoo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFoo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFoo: %w", err)
+	}
+	return oldValue.Foo, nil
+}
+
+// ResetFoo resets all changes to the "foo" field.
+func (m *UserMutation) ResetFoo() {
+	m.foo = nil
+}
+
+// SetBar sets the "bar" field.
+func (m *UserMutation) SetBar(b *barv1alpha.Bar) {
+	m.bar = &b
+}
+
+// Bar returns the value of the "bar" field in the mutation.
+func (m *UserMutation) Bar() (r *barv1alpha.Bar, exists bool) {
+	v := m.bar
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBar returns the old "bar" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldBar(ctx context.Context) (v *barv1alpha.Bar, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBar is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBar requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBar: %w", err)
+	}
+	return oldValue.Bar, nil
+}
+
+// ResetBar resets all changes to the "bar" field.
+func (m *UserMutation) ResetBar() {
+	m.bar = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -250,12 +327,18 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m.age != nil {
 		fields = append(fields, user.FieldAge)
 	}
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
+	}
+	if m.foo != nil {
+		fields = append(fields, user.FieldFoo)
+	}
+	if m.bar != nil {
+		fields = append(fields, user.FieldBar)
 	}
 	return fields
 }
@@ -269,6 +352,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Age()
 	case user.FieldName:
 		return m.Name()
+	case user.FieldFoo:
+		return m.Foo()
+	case user.FieldBar:
+		return m.Bar()
 	}
 	return nil, false
 }
@@ -282,6 +369,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAge(ctx)
 	case user.FieldName:
 		return m.OldName(ctx)
+	case user.FieldFoo:
+		return m.OldFoo(ctx)
+	case user.FieldBar:
+		return m.OldBar(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -304,6 +395,20 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case user.FieldFoo:
+		v, ok := value.(*foov1alpha.Foo)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFoo(v)
+		return nil
+	case user.FieldBar:
+		v, ok := value.(*barv1alpha.Bar)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBar(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -374,6 +479,12 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldName:
 		m.ResetName()
+		return nil
+	case user.FieldFoo:
+		m.ResetFoo()
+		return nil
+	case user.FieldBar:
+		m.ResetBar()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

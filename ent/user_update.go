@@ -7,11 +7,14 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/bug/ent/predicate"
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/predicate"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
+	barv1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/bar/v1alpha"
+	"github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
+	foov1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -43,6 +46,18 @@ func (uu *UserUpdate) AddAge(i int) *UserUpdate {
 // SetName sets the "name" field.
 func (uu *UserUpdate) SetName(s string) *UserUpdate {
 	uu.mutation.SetName(s)
+	return uu
+}
+
+// SetFoo sets the "foo" field.
+func (uu *UserUpdate) SetFoo(f *foov1alpha.Foo) *UserUpdate {
+	uu.mutation.SetFoo(f)
+	return uu
+}
+
+// SetBar sets the "bar" field.
+func (uu *UserUpdate) SetBar(b *barv1alpha.Bar) *UserUpdate {
+	uu.mutation.SetBar(b)
 	return uu
 }
 
@@ -144,6 +159,20 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldName,
 		})
 	}
+	if value, ok := uu.mutation.Foo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldFoo,
+		})
+	}
+	if value, ok := uu.mutation.Bar(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldBar,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -179,6 +208,18 @@ func (uuo *UserUpdateOne) AddAge(i int) *UserUpdateOne {
 // SetName sets the "name" field.
 func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
 	uuo.mutation.SetName(s)
+	return uuo
+}
+
+// SetFoo sets the "foo" field.
+func (uuo *UserUpdateOne) SetFoo(f *foov1alpha.Foo) *UserUpdateOne {
+	uuo.mutation.SetFoo(f)
+	return uuo
+}
+
+// SetBar sets the "bar" field.
+func (uuo *UserUpdateOne) SetBar(b *barv1alpha.Bar) *UserUpdateOne {
+	uuo.mutation.SetBar(b)
 	return uuo
 }
 
@@ -302,6 +343,20 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldName,
+		})
+	}
+	if value, ok := uuo.mutation.Foo(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldFoo,
+		})
+	}
+	if value, ok := uuo.mutation.Bar(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldBar,
 		})
 	}
 	_node = &User{config: uuo.config}

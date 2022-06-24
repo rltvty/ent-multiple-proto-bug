@@ -2,6 +2,10 @@
 
 package user
 
+import (
+	"github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
+)
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
@@ -11,6 +15,10 @@ const (
 	FieldAge = "age"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldFoo holds the string denoting the foo field in the database.
+	FieldFoo = "foo"
+	// FieldBar holds the string denoting the bar field in the database.
+	FieldBar = "bar"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -20,6 +28,8 @@ var Columns = []string{
 	FieldID,
 	FieldAge,
 	FieldName,
+	FieldFoo,
+	FieldBar,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

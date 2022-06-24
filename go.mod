@@ -1,4 +1,4 @@
-module entgo.io/bug
+module github.com/rltvty/ent-multiple-proto-bug
 
 go 1.17
 
@@ -21,4 +21,5 @@ require (
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 )

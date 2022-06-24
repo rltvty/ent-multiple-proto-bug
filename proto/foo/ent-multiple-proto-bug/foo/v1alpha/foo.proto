@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package ent_multiple_proto_bug.foo.v1alpha;
+
+message Foo {
+    string id = 1;
+}

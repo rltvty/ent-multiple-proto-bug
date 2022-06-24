@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
+	barv1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/bar/v1alpha"
+	foov1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -28,6 +30,18 @@ func (uc *UserCreate) SetAge(i int) *UserCreate {
 // SetName sets the "name" field.
 func (uc *UserCreate) SetName(s string) *UserCreate {
 	uc.mutation.SetName(s)
+	return uc
+}
+
+// SetFoo sets the "foo" field.
+func (uc *UserCreate) SetFoo(f *foov1alpha.Foo) *UserCreate {
+	uc.mutation.SetFoo(f)
+	return uc
+}
+
+// SetBar sets the "bar" field.
+func (uc *UserCreate) SetBar(b *barv1alpha.Bar) *UserCreate {
+	uc.mutation.SetBar(b)
 	return uc
 }
 
@@ -107,6 +121,12 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}
 	}
+	if _, ok := uc.mutation.Foo(); !ok {
+		return &ValidationError{Name: "foo", err: errors.New(`ent: missing required field "User.foo"`)}
+	}
+	if _, ok := uc.mutation.Bar(); !ok {
+		return &ValidationError{Name: "bar", err: errors.New(`ent: missing required field "User.bar"`)}
+	}
 	return nil
 }
 
@@ -149,6 +169,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldName,
 		})
 		_node.Name = value
+	}
+	if value, ok := uc.mutation.Foo(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldFoo,
+		})
+		_node.Foo = value
+	}
+	if value, ok := uc.mutation.Bar(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: user.FieldBar,
+		})
+		_node.Bar = value
 	}
 	return _node, _spec
 }

@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"log"
 
-	"entgo.io/bug/ent/migrate"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/migrate"
 
-	"entgo.io/bug/ent/user"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package ent_multiple_proto_bug.bar.v1alpha;
+
+message Bar {
+    string id = 1;
+}

@@ -7,11 +7,12 @@ import (
 	"fmt"
 	"math"
 
-	"entgo.io/bug/ent/predicate"
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/predicate"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
+	"github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 )
 
 // UserQuery is the builder for querying User entities.

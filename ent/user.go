@@ -6,8 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"entgo.io/bug/ent/user"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/user"
+	barv1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/bar/v1alpha"
+	"github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
+	foov1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 )
 
 // User is the model entity for the User schema.
@@ -19,6 +22,10 @@ type User struct {
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Foo holds the value of the "foo" field.
+	Foo *foov1alpha.Foo `json:"foo,omitempty"`
+	// Bar holds the value of the "bar" field.
+	Bar *barv1alpha.Bar `json:"bar,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,6 +33,10 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldBar:
+			values[i] = new(barv1alpha.Bar)
+		case user.FieldFoo:
+			values[i] = new(foov1alpha.Foo)
 		case user.FieldID, user.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName:
@@ -63,6 +74,18 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.Name = value.String
 			}
+		case user.FieldFoo:
+			if value, ok := values[i].(*foov1alpha.Foo); !ok {
+				return fmt.Errorf("unexpected type %T for field foo", values[i])
+			} else if value != nil {
+				u.Foo = value
+			}
+		case user.FieldBar:
+			if value, ok := values[i].(*barv1alpha.Bar); !ok {
+				return fmt.Errorf("unexpected type %T for field bar", values[i])
+			} else if value != nil {
+				u.Bar = value
+			}
 		}
 	}
 	return nil
@@ -95,6 +118,10 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("%v", u.Age))
 	builder.WriteString(", name=")
 	builder.WriteString(u.Name)
+	builder.WriteString(", foo=")
+	builder.WriteString(fmt.Sprintf("%v", u.Foo))
+	builder.WriteString(", bar=")
+	builder.WriteString(fmt.Sprintf("%v", u.Bar))
 	builder.WriteByte(')')
 	return builder.String()
 }

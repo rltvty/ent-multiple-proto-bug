@@ -3,8 +3,10 @@
 package user
 
 import (
-	"entgo.io/bug/ent/predicate"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rltvty/ent-multiple-proto-bug/ent/predicate"
+	barv1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/bar/v1alpha"
+	foov1alpha "github.com/rltvty/ent-multiple-proto-bug/gen/ent-multiple-proto-bug/foo/v1alpha"
 )
 
 // ID filters vertices based on their ID field.
@@ -101,6 +103,20 @@ func Age(v int) predicate.User {
 func Name(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldName), v))
+	})
+}
+
+// Foo applies equality check predicate on the "foo" field. It's identical to FooEQ.
+func Foo(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFoo), v))
+	})
+}
+
+// Bar applies equality check predicate on the "bar" field. It's identical to BarEQ.
+func Bar(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBar), v))
 	})
 }
 
@@ -288,6 +304,158 @@ func NameEqualFold(v string) predicate.User {
 func NameContainsFold(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldName), v))
+	})
+}
+
+// FooEQ applies the EQ predicate on the "foo" field.
+func FooEQ(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFoo), v))
+	})
+}
+
+// FooNEQ applies the NEQ predicate on the "foo" field.
+func FooNEQ(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldFoo), v))
+	})
+}
+
+// FooIn applies the In predicate on the "foo" field.
+func FooIn(vs ...*foov1alpha.Foo) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldFoo), v...))
+	})
+}
+
+// FooNotIn applies the NotIn predicate on the "foo" field.
+func FooNotIn(vs ...*foov1alpha.Foo) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldFoo), v...))
+	})
+}
+
+// FooGT applies the GT predicate on the "foo" field.
+func FooGT(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldFoo), v))
+	})
+}
+
+// FooGTE applies the GTE predicate on the "foo" field.
+func FooGTE(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldFoo), v))
+	})
+}
+
+// FooLT applies the LT predicate on the "foo" field.
+func FooLT(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldFoo), v))
+	})
+}
+
+// FooLTE applies the LTE predicate on the "foo" field.
+func FooLTE(v *foov1alpha.Foo) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldFoo), v))
+	})
+}
+
+// BarEQ applies the EQ predicate on the "bar" field.
+func BarEQ(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldBar), v))
+	})
+}
+
+// BarNEQ applies the NEQ predicate on the "bar" field.
+func BarNEQ(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldBar), v))
+	})
+}
+
+// BarIn applies the In predicate on the "bar" field.
+func BarIn(vs ...*barv1alpha.Bar) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldBar), v...))
+	})
+}
+
+// BarNotIn applies the NotIn predicate on the "bar" field.
+func BarNotIn(vs ...*barv1alpha.Bar) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldBar), v...))
+	})
+}
+
+// BarGT applies the GT predicate on the "bar" field.
+func BarGT(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldBar), v))
+	})
+}
+
+// BarGTE applies the GTE predicate on the "bar" field.
+func BarGTE(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldBar), v))
+	})
+}
+
+// BarLT applies the LT predicate on the "bar" field.
+func BarLT(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldBar), v))
+	})
+}
+
+// BarLTE applies the LTE predicate on the "bar" field.
+func BarLTE(v *barv1alpha.Bar) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldBar), v))
 	})
 }
 
